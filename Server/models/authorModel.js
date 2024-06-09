@@ -4,7 +4,7 @@ const authorSchema = new mongoose.Schema(
     {
     nome: {
         type: String,
-        require: true
+        required: true
     },
     cognome: {
         type: String,

@@ -10,8 +10,8 @@ const dbName = 'dbW4D4_backend'
 app.use(cors());
 app.use(express.json());
 
-//Mode
-const authorModel = require('./models/authorModel')
+//Models
+const authorModel = require('./models/authorModel');
 
 //Endpoints
 const authorsEndpoint = require('./routes/authors');

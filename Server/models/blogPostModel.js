@@ -19,8 +19,8 @@ const blogPostSchema = new mongoose.Schema(
             required: true
         },
         author: {
-            type: String,
-            required: true
+            type: Schema.type.ObjectId,
+            ref: "Author"
         },
         content: {
             type: String,

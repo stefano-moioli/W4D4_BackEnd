@@ -1,6 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const upload = multer ({ dest: 'uploads/' });
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const sgMail = require('@sendgrid/mail')
 require('dotenv').config();
 
 
@@ -13,6 +18,26 @@ app.use(express.json());
 
 //Models
 const authorModel = require('./models/authorModel');
+
+//Cloudinary
+cloudinary.config({ 
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET_KEY
+});
+
+
+const storageCloud = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'cloud-upload',
+      format: async (req, file) => 'png', // supports promises as well
+      public_id: (req, file) => file.originalname
+    },
+  });
+
+  const cloud = multer({storage: storageCloud}) // Definisco lo storage e volendo posso aggiungere i filtri
+
 
 //Endpoints
 const authorsEndpoint = require('./routes/authors');

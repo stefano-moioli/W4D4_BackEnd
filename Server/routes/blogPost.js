@@ -17,11 +17,12 @@ blogPostRouter.get('/blogPosts/:id', async (req, res) => {
         return res.status(200).json(blogPost);
     }
     catch (error) {
-    return res.status(500).json({ message: 'post non trovato', error: error })
+    // return res.status(500).json({ message: 'post non trovato', error: error })
+    next(error);
     }
 })
 
-blogPostRouter.post('/blogPosts', async (req, res) =>{
+blogPostRouter.post('/blogPosts', async (req, res, next) =>{
     const obj = req.body;
     try {
         const newPost =  blogPostModel(obj);
@@ -29,28 +30,31 @@ blogPostRouter.post('/blogPosts', async (req, res) =>{
         return res.status(200).json(savePost);
         
     } catch (error) {
-    return res.status(500).json({ message: 'errore nel caricamento del post', error: error })
+    // return res.status(500).json({ message: 'errore nel caricamento del post', error: error })
+    next(error);
     }
 })
 
-blogPostRouter.put('/blogPosts/:id', async (req, res) =>{
+blogPostRouter.put('/blogPosts/:id', async (req, res, next) =>{
     const id = req.params.id;
     const obj = req.body;
     try {
         const editPost = await blogPostModel.findByIdAndUpdate(id, obj);
         return res.status(200).json(editPost);
     } catch (error) {
-    return res.status(500).json({ message: 'errore nella modifica del post', error: error })
+    // return res.status(500).json({ message: 'errore nella modifica del post', error: error })
+    next(error);
     }
 })
 
-blogPostRouter.delete('/blogPosts/:id', async (req, res) =>{
+blogPostRouter.delete('/blogPosts/:id', async (req, res, next) =>{
     const id = req.params.id;
     try {
         await blogPostModel.findByIdAndDelete(id);
         return res.status(200).json({message: 'Post eliminato'});
     } catch (error) {
-    return res.status(500).json({ message: 'errore nella cancellazione del post', error: error })
+        next(error)
+    // return res.status(500).json({ message: 'errore nella cancellazione del post', error: error })
     }
 })
 

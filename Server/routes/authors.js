@@ -50,12 +50,22 @@ authorRouter.put('/authors/:id', async(req, res) =>{
 
 //Delete Author
 authorRouter.delete("/authors/:id", async(req, res) =>{
-    const id = req.params.id
+    const id = req.params.id;
     try {
         await authorModel.findByIdAndDelete(id);
         return res.status(200).json({message: "Autore eliminato"});
     } catch (error) {
         res.status(500).json({message: "Errore nella cancellazione dell'autore", error: error})
+    }
+})
+
+authorRouter.patch("/authors/:id/avatar", async(req, res, next) =>{
+    const id = req.params.id;
+    try {
+        await authorModel.findById(id);
+        // Ora vediamo        
+    } catch (error) {
+        next(error);
     }
 })
 

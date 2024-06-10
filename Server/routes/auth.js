@@ -8,6 +8,7 @@ const jwtSecretKey = "jwt-secret-key";
 const authorModel = require('../models/authorModel');
 
 
+
 router.post('/auth/register', (req, res) => {
 
     const password = req.body.password

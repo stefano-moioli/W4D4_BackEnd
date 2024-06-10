@@ -1,7 +1,31 @@
 const express = require('express');
 const authorRouter = express.Router();
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+require('dotenv').config();
 
 const authorModel = require('../models/authorModel');
+const imageModel = require('../models/imageModel');
+
+
+cloudinary.config({ 
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET_KEY
+});
+
+
+const storageCloud = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'cloud-upload',
+      format: async (req, file) => 'png', // supports promises as well
+      public_id: (req, file) => file.originalname
+    },
+  });
+
+  const cloud = multer({storage: storageCloud})
 
 //Authors Routes
 
@@ -59,15 +83,21 @@ authorRouter.delete("/authors/:id", async(req, res) =>{
     }
 })
 
-authorRouter.patch("/authors/:id/avatar", async(req, res, next) =>{
+
+//Upload Avatar
+authorRouter.post("/authors/:id/avatar", cloud.single('avatar_file_cloud'), async (req, res, next) =>{
     const id = req.params.id;
+    const avatar = req.file.path;
+    console.log(file);
     try {
-        await authorModel.findById(id);
-        // Ora vediamo        
+        let authorAvatar = await authorModel.findByIdAndUpdate(id, {avatar: avatar});
+        return res.status(200).json(authorAvatar);
+        
     } catch (error) {
-        next(error);
+        return res.status(500).json({message: "Problemi nel salvataggio dell'avatar", error: error})
     }
 })
+
 
 //Middlewares
 

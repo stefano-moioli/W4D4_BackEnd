@@ -1,8 +1,29 @@
 const express = require('express');
 const blogPostRouter = express.Router();
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+require('dotenv').config();
 
 const blogPostModel = require('../models/blogPostModel');
 
+cloudinary.config({ 
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET_KEY
+});
+
+
+const storageCloud = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'cloud-upload',
+      format: async (req, file) => 'png', // supports promises as well
+      public_id: (req, file) => file.originalname
+    },
+  });
+
+  const cloud = multer({storage: storageCloud})
 
 
 blogPostRouter.get('/blogPosts', async (req, res) => {
@@ -57,5 +78,19 @@ blogPostRouter.delete('/blogPosts/:id', async (req, res, next) =>{
     // return res.status(500).json({ message: 'errore nella cancellazione del post', error: error })
     }
 })
+
+blogPostRouter.post("/blogPosts/:id/cover", cloud.single('cover_file_cloud'), async (req, res, next) =>{
+    const id = req.params.id;
+    const cover = req.file.path;
+    console.log(file);
+    try {
+        let coverBlogPost = await blogPostModel.findByIdAndUpdate(id, {cover: cover});
+        return res.status(200).json(coverBlogPost);
+        
+    } catch (error) {
+        return res.status(500).json({message: "Problemi nel salvataggio dell'avatar", error: error})
+    }
+})
+
 
 module.exports = blogPostRouter;

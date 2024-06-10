@@ -12,6 +12,11 @@ const authorSchema = new mongoose.Schema(
     },
     email: {
         type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
         required: true
     },
     birthday: {
@@ -20,7 +25,7 @@ const authorSchema = new mongoose.Schema(
     },
     avatar: {
         type: String,
-        required: true
+        required: false
     }
 },
 { collection : "Author" }

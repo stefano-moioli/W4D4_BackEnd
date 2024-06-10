@@ -43,6 +43,11 @@ const storageCloud = new CloudinaryStorage({
 const authorsEndpoint = require('./routes/authors');
 app.use(authorsEndpoint);
 
+const authenticationEndpoind = require ("./routes/auth");
+app.use(authenticationEndpoind);
+
+const meEndpoint = require ("./routes/me");
+app.use(meEndpoint);
 
 //Middlewares
 const { errorHandler, pageNotFoundHandler } = require('./middlewares/error');

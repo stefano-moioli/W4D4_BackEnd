@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const jwtSecretKey = "jwt-secret-key";
+require('dotenv').config();
 
-const verifyAccessToken = require("../routes/auth");
 
 
 const authMiddleware = (req, res, next) => {
@@ -12,7 +11,7 @@ const authMiddleware = (req, res, next) => {
         return res.status(401).json({message: 'Invalid Token'})
     } else {
         token = token.split(' ')[1]
-        jwt.verify(token, jwtSecretKey, (err, data) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, data) => {
             if(err) {
                 return res.status(401).json({message: 'Invalid Token'})
             } else {

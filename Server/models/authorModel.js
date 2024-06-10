@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const authorSchema = new mongoose.Schema(
     {
-    nome: {
+    name: {
         type: String,
         required: true
     },
-    cognome: {
+    lastName: {
         type: String,
         required: true
     },
@@ -14,7 +14,7 @@ const authorSchema = new mongoose.Schema(
         type: String,
         required: true
     },
-    dataDiNascita: {
+    birthday: {
         type: String,
         required: true
     },
@@ -22,7 +22,8 @@ const authorSchema = new mongoose.Schema(
         type: String,
         required: true
     }
-}
+},
+{ collection : "Author" }
 )
 
 const authorModel = mongoose.model('Author', authorSchema);

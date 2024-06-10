@@ -6,6 +6,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 require('dotenv').config();
 
 const blogPostModel = require('../models/blogPostModel');
+const commentModel = require('../models/commentModel');
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUD_NAME, 
@@ -92,5 +93,75 @@ blogPostRouter.post("/blogPosts/:id/cover", cloud.single('cover_file_cloud'), as
     }
 })
 
+blogPostRouter.get("blogPosts/:id/comments", async (req, res, next) => {
+    try {
+      let comments = await blogPostModel.find({
+        blogPost: req.params.id,
+      }).populate({
+        path: "author",
+        model: "Author",
+        select: ["name", "lastName", "avatar"],
+      })
+      res.send(comments)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  blogPostRouter.get("blogPosts/:id/comments/:commentId", async (req, res, next) => {
+    try {
+      let comments = await commentModel.find({
+        blogPost: req.params.id,
+        _id: req.params.commentId
+      }).populate({
+        path: "author",
+        model: "Author",
+        select: ["name", "lastName", "avatar"],
+      })
+      res.send(comments)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+ blogPostRouter.put("blogPosts/:id", async (req, res, next) => {
+    try {
+      let blog = await blogPostModel.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      })
+      res.send(blog)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+ blogPostRouter.put("blogPosts/:id/comments/:commentId", async (req, res, next) => {
+    try {
+      let comment = await commentModel.findOneAndUpdate({
+        blogPost: req.params.id,
+        _id: req.params.commentId
+      }, req.body, {new: true}).populate({
+        path: "author",
+        model: "Author",
+        select: ["name", "lastName", "avatar"],
+      })
+      res.send(comment)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  blogPostRouter.delete("blogPosts/:id/comments/:commentId", async (req, res, next) => {
+    try {
+      await commentModel.findOneAndDelete({
+        blogPost: req.params.id,
+        _id: req.params.commentId
+      })
+      res.send(204)
+    } catch (error) {
+      next(error)
+    }
+  })
+  
 
 module.exports = blogPostRouter;

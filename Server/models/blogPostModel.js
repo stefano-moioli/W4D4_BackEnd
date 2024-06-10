@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const comment = require("../models/commentModel");
 
 const blogPostSchema = new mongoose.Schema(
     {
@@ -15,18 +16,28 @@ const blogPostSchema = new mongoose.Schema(
             required: true
         },
         readTime: {
+            value: { 
             type: Number,
             required: true
         },
+        unit: {
+            type: String,
+            required: true
+        },
+    },
         author: {
             type: Schema.type.ObjectId,
             ref: "Author"
         },
-        content: {
-            type: String,
-            required: true
-        }
-    }
+        comments: [{
+            "text": String,
+            "author": {
+                type: Schema.Types.ObjectId,
+                ref: "Author",
+            },
+        }]
+    },
+    { collection: "BlogPost"}
 )
 
 const blogPostModel = mongoose.model('BlogPost', blogPostSchema);

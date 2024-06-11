@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+const passport = require("passport");
 
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
@@ -61,5 +62,22 @@ router.post("/auth/login", async (req, res) =>{
     }
 
 });
+
+
+router.get('/auth/googleLogin',
+  passport.authenticate('google', { scope: ['profile'] }));
+
+router.get('/auth/callback',
+  passport.authenticate('google', { session: false, failureRedirect: '/auth/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+
+    try {
+        res.redirect('http://localhost:3000');
+    } catch (err) {
+        next(err)
+    }
+
+  });
 
 module.exports = router;

@@ -54,8 +54,11 @@ return(
 
 
         <Button type="button" className="bg-dark w-50" onClick={formSubmitHandler}> Login </Button>
-        { error ? <Alert variant={"danger"} className="mt-3"> {error.message} </Alert> : ""}
       </Form>
+      <Button type="button" className="bg-dark w-50 mt-2" href="http://localhost:3001/auth/googleLogin"> Login with Google</Button>
+
+      { error ? <Alert variant={"danger"} className="mt-3"> {error.message} </Alert> : ""}
+
       </Container>
 
 )}

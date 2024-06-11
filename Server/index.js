@@ -6,6 +6,7 @@ const upload = multer ({ dest: 'uploads/' });
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const sgMail = require('@sendgrid/mail')
+const passport = require("passport");
 require('dotenv').config();
 
 
@@ -53,6 +54,9 @@ app.use(meEndpoint);
 const { errorHandler, pageNotFoundHandler } = require('./middlewares/error');
 app.use(errorHandler);
 app.use(pageNotFoundHandler);
+
+const googleStrategy = require('./middlewares/OAuthMiddleware');
+passport.use("google", googleStrategy);
 
 
 async function connect() {

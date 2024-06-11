@@ -1,17 +1,26 @@
 import React from "react";
-import { Button, Container, Navbar } from "react-bootstrap";
+import { Button, Col, Container, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./styles.css";
 const NavBar = props => {
   return (
-    <Navbar expand="lg" className="blog-navbar" fixed="top">
+    <Navbar expand="lg" className="blog-navbar">
       <Container className="justify-content-between">
         <Navbar.Brand as={Link} to="/">
           <img className="blog-navbar-brand" alt="logo" src={logo} />
         </Navbar.Brand>
 
-        <Button as={Link} to="/new" className="blog-navbar-add-button bg-dark" size="lg">
+        <Col></Col>
+        <Button as={Link} to="/auth/login" className="me-3 bg-dark">
+          Login
+        </Button>
+
+        <Button as={Link} to="/auth/register" className="me-3 bg-dark">
+          Register
+        </Button>
+
+        <Button as={Link} to="/new" className="blog-navbar-add-button bg-dark">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -24,6 +33,7 @@ const NavBar = props => {
           </svg>
           Nuovo Articolo
         </Button>
+        
       </Container>
     </Navbar>
   );

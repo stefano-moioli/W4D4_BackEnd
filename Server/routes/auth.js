@@ -62,40 +62,4 @@ router.post("/auth/login", async (req, res) =>{
 
 });
 
-/* router.post('auth/register', async (req, res) => {
-    const { email, password } = req.body;
-    
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newAuthor = new authorModel({ email, password: hashedPassword });
-        await newAuthor.save();
-
-        return res.status(201).json({ message: 'Utente registrato con successo' });
-    } catch (error) {
-        return res.status(500).json({ message: 'Errore del server', error: error });
-    }
-});
-
-router.post('auth/login', async (req, res) => {
-    const { email, password } = req.body;
-    
-    try {
-        const author = await authorModel.findOne({ email });
-        if (!author) {
-            return res.status(404).json({ message: 'Utente non trovato' });
-        }
-
-        const isMatch = await bcrypt.compare(password, author.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Password errata' });
-        }
-
-        const token = jwt.sign({ id: author._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-        return res.status(200).json({ token });
-    } catch (error) {
-        return res.status(500).json({ message: 'Errore del server', error: error });
-    }
-});*/
-
-
 module.exports = router;

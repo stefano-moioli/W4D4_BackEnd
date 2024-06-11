@@ -20,7 +20,7 @@ function App() {
         <Route path="/new" element={<NewBlogPost />} />
         <Route path="/auth/login" element={<Login /> } />
         <Route path="/auth/register" element={<Register/> } />
-        <Route path="/me" element={<Me/>} />
+        <Route path="/me" element={<Me />} />
         <Route path="*" element={<Error /> } />
       </Routes>
       <Footer />
